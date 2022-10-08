@@ -13,6 +13,8 @@ const db = mysql2.createConnection({
 // If there is a auth problem
 // ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root'
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.json("hello this is the backend");
 });
@@ -27,11 +29,7 @@ app.get("/books", (req, res) => {
 
 app.post("/books", (req, res) => {
   const q = "INSERT INTO books (`title`, `desc`, `cover`) VALUES (?)";
-  const values = [
-    "title from backend",
-    "desc from backend",
-    "cover from backend",
-  ];
+  const values = [req.body.title, req.body.desc, req.body.cover];
 
   db.query(q, [values], (err, data) => {
     if (err) return res.json(err);
